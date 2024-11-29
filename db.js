@@ -1,24 +1,32 @@
-const { Sequelize } = require('sequelize')
+const { Sequelize } = require('sequelize');
 
-// Database
+// Database Connection
 const sequelize = new Sequelize(
-  '', // TODO: database connection string
+  process.env.DATABASE_URL, // Connection string from environment variable
   {
     dialect: 'postgres',
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false,
+        rejectUnauthorized: false, // Necessary for many cloud-hosted databases
       },
     },
     define: {
-      createdAt: 'added',
+      createdAt: 'added', // Custom field names
       updatedAt: 'updated',
-    }
-  },
-)
+    },
+  }
+);
 
-sequelize.authenticate()
-sequelize.sync()
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
 
-module.exports = sequelize
+sequelize.sync();
+
+module.exports = sequelize;
