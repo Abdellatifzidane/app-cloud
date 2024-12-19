@@ -12,7 +12,7 @@ services:
     envVars:
       - key: DATABASE_URL # Sets DATABASE_URL to the connection string of the django-app-db database
         fromDatabase:
-          name: django-app-db
+          name: cloud-db
           property: connectionString
 
 databases:
